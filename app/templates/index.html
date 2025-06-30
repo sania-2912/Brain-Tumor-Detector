@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Brain Tumor Detector</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url("{{ url_for('static', filename='brain_bg.jpeg') }}") no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+      height: 100vh;
+      overflow: auto;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      background-color: rgba(30, 42, 56, 0.92);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      width: 400px;
+      margin: 80px auto;
+      color: white;
+    }
+
+    h1 {
+      color: #00ffe0;
+      margin-bottom: 25px;
+    }
+
+    input[type="file"] {
+      margin: 15px 0;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      width: 100%;
+    }
+
+    button {
+      background-color: #00ffe0;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #00c9b7;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .preview {
+      margin-top: 20px;
+    }
+
+    .preview img {
+      width: 200px;
+      border-radius: 10px;
+      border: 2px solid #00ffe0;
+    }
+
+    .symptoms {
+      margin: 60px auto;
+      width: 80%;
+      max-width: 800px;
+      color: #fff;
+      text-align: left;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 15px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .symptoms h2 {
+      color: #00ffe0;
+      margin-bottom: 10px;
+    }
+
+    .symptoms ul {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Brain Tumor Detector</h1>
+    <form method="POST" enctype="multipart/form-data">
+      <input type="file" name="image" required>
+      <br>
+      <button type="submit">Detect Tumor</button>
+    </form>
+
+    {% if prediction %}
+      <div class="result">
+        Predicted: {{ prediction }}
+      </div>
+    {% endif %}
+
+    {% if image_url %}
+      <div class="preview">
+        <img src="{{ image_url }}" alt="Uploaded Image">
+      </div>
+    {% endif %}
+  </div>
+
+  {% if symptoms and prediction != 'notumor' %}
+    <div class="symptoms">
+      <h2>Common Symptoms of {{ prediction.capitalize() }}</h2>
+      <ul>
+        {% for s in symptoms %}
+          <li>{{ s }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+</body>
+</html>
